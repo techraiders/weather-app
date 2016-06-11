@@ -1,6 +1,5 @@
 import {Component} from '@angular/core';
 import {Weather} from './weather';
-import {WeatherService} from './weather.service';
 
 @Component({
     selector : 'my-app',
@@ -48,8 +47,7 @@ import {WeatherService} from './weather.service';
             color: red;
             font-style: 12px;
         }
-    `],
-    providers: [WeatherService]
+    `]
 })
 export class AppComponent {
 	public city: string;
@@ -57,12 +55,13 @@ export class AppComponent {
     public weatherOfCities: Array<Weather>;
     public errorMessage: string;
 
-    constructor(private weatherService:WeatherService) {
+    constructor() {
 		this.city = "";
         this.weatherOfCities = [];
 	}
 
     getWeather = function(city: string) {
+        this.errorMessage = "";
         var weather: Weather;
         if (city.toLocaleLowerCase() == "vienna") { //IF ENTERED CITY IS VIENNA RETURN BELOW WEATHER OBJECT
             weather = {
@@ -81,7 +80,7 @@ export class AppComponent {
             };
         } else {
             // IF SEARCHED CITY DOESN'T EXIST
-            
+            this.errorMessage = "Sorry! Entered city doesn't exist.";
         }
         return weather;
     }
@@ -90,7 +89,7 @@ export class AppComponent {
     //addCity = function(city: string, $event:any) {
         if ($event.keyCode == 13) {
             //var weather = this._weatherService.getWeather(city);
-            var weather = this.weatherService.getWeather(city);
+            var weather = this.getWeather(city);
             if (weather) {
                 //this.weatherOfCities.push(this.getWeather(city));
                 this.weatherOfCities.push(weather);
