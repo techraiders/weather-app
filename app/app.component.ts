@@ -1,5 +1,6 @@
 import {Component} from '@angular/core';
 import {Weather} from './weather';
+import {WeatherService} from './weather.service';
 
 @Component({
     selector : 'my-app',
@@ -47,7 +48,8 @@ import {Weather} from './weather';
             color: red;
             font-style: 12px;
         }
-    `]
+    `],
+    providers: [WeatherService]
 })
 export class AppComponent {
 	public city: string;
@@ -55,44 +57,20 @@ export class AppComponent {
     public weatherOfCities: Array<Weather>;
     public errorMessage: string;
 
-    constructor() {
+    constructor(private weatherService:WeatherService) {
 		this.city = "";
         this.weatherOfCities = [];
-	}
-
-    getWeather = function(city: string) {
-        this.errorMessage = "";
-        var weather: Weather;
-        if (city.toLocaleLowerCase() == "vienna") { //IF ENTERED CITY IS VIENNA RETURN BELOW WEATHER OBJECT
-            weather = {
-                "id": 1,
-                "city": "vienna",
-                "main": "Clouds",
-                "description": "overcast clouds"
-            };
-        } else if (city.toLocaleLowerCase() == "london") {
-            // RETURN BELOW OBJECT IF SEARCHED CITY IS LONDON
-            weather = {
-                "id": 2,
-                "city": "london",
-                "main": "Rain",
-                "description": "very heavy rain"
-            };
-        } else {
-            // IF SEARCHED CITY DOESN'T EXIST
-            this.errorMessage = "Sorry! Entered city doesn't exist.";
-        }
-        return weather;
-    }
+	}   
 
     addCity(city: string, $event: any) {    
-    //addCity = function(city: string, $event:any) {
         if ($event.keyCode == 13) {
-            //var weather = this._weatherService.getWeather(city);
-            var weather = this.getWeather(city);
+            var weather = this.weatherService.getWeather(city);
             if (weather) {
-                //this.weatherOfCities.push(this.getWeather(city));
                 this.weatherOfCities.push(weather);
+                this.errorMessage = undefined;
+            } else {
+                var cityWithoutWeather = city;
+                this.errorMessage = "Sorry! There is not weather data for " + cityWithoutWeather + ".";
             }
             this.city = "";
         }
