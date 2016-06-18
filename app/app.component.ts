@@ -88,10 +88,8 @@ export class AppComponent {
     addCity(city: string, $event: any) {    
     //addCity = function(city: string, $event:any) {
         if ($event.keyCode == 13) {
-            //var weather = this._weatherService.getWeather(city);
             var weather = this.getWeather(city);
             if (weather) {
-                //this.weatherOfCities.push(this.getWeather(city));
                 this.weatherOfCities.push(weather);
             }
             this.city = "";
